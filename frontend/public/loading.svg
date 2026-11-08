@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg"
+     xmlns:xlink="http://www.w3.org/1999/xlink"
+     width="800" height="600" viewBox="0 0 800 600"
+     role="img" aria-labelledby="title description">
+  <title id="title">Monochrome animated loading mark</title>
+  <desc id="description">Four grayscale circles pulse and move in a rotating pattern.</desc>
+
+  <!-- Transparent background: place over the dashboard's #E8E8E8 surface. -->
+  <g id="spinner" transform="rotate(0 400 300)">
+    <animateTransform attributeName="transform"
+                      type="rotate"
+                      from="0 400 300"
+                      to="360 400 300"
+                      dur="2.64s"
+                      repeatCount="indefinite" />
+
+    <!-- Circle 1: black -->
+    <circle cx="310" cy="300" r="15.73" fill="#202020">
+      <animate attributeName="r" values="15.73;31.45;15.73" dur="1.04s" begin="0s" repeatCount="indefinite" />
+      <animate attributeName="cy" values="300;240;300" dur="1.04s" begin="0s" repeatCount="indefinite" />
+      <animate attributeName="fill" values="#202020;#3A3A3A;#202020" dur="1.32s" repeatCount="indefinite" />
+    </circle>
+
+    <!-- Circle 2: charcoal grey -->
+    <circle cx="370" cy="300" r="15.73" fill="#555555">
+      <animate attributeName="r" values="15.73;31.45;15.73" dur="1.04s" begin="0.08s" repeatCount="indefinite" />
+      <animate attributeName="cy" values="300;360;300" dur="1.04s" begin="0.08s" repeatCount="indefinite" />
+      <animate attributeName="fill" values="#555555;#777777;#555555" dur="1.32s" begin="0.08s" repeatCount="indefinite" />
+    </circle>
+
+    <!-- Circle 3: soft grey -->
+    <circle cx="430" cy="300" r="15.73" fill="#999999">
+      <animate attributeName="r" values="15.73;31.45;15.73" dur="1.04s" begin="0.16s" repeatCount="indefinite" />
+      <animate attributeName="cy" values="300;240;300" dur="1.04s" begin="0.16s" repeatCount="indefinite" />
+      <animate attributeName="fill" values="#999999;#B8B8B8;#999999" dur="1.32s" begin="0.16s" repeatCount="indefinite" />
+    </circle>
+
+    <!-- Circle 4: whitish grey -->
+    <circle cx="490" cy="300" r="15.73" fill="#E2E2E2">
+      <animate attributeName="r" values="15.73;31.45;15.73" dur="1.04s" begin="0.24s" repeatCount="indefinite" />
+      <animate attributeName="cy" values="300;360;300" dur="1.04s" begin="0.24s" repeatCount="indefinite" />
+      <animate attributeName="fill" values="#E2E2E2;#F7F7F7;#E2E2E2" dur="1.32s" begin="0.24s" repeatCount="indefinite" />
+    </circle>
+  </g>
+</svg>
