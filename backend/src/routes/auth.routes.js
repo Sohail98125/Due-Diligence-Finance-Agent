@@ -12,10 +12,10 @@ router.get('/google',
 // after authenticate google fallback here
 router.get('/google/callback',
     passport.authenticate('google', {
-        failureRedirect: 'http://localhost:5173/login'
+        failureRedirect: 'https://due-diligence-finance-agent.vercel.app/login'
     }), (req, res) => {
         // success then go to the frontend 
-        res.redirect('http://localhost:5173/dashboard')
+        res.redirect('https://due-diligence-finance-agent.vercel.app/dashboard')
     }
 )
 
