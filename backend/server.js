@@ -10,6 +10,7 @@ import "dotenv/config";
 import { startAnalysisWorker } from './src/queues/analysis.worker.js';
 
 const app = express();
+const isProduction = process.env.NODE_ENV === 'production';
 
 app.use(cors({
     origin: process.env.CLIENT_URL || "http://localhost:5173",
@@ -17,6 +18,10 @@ app.use(cors({
 }));
 
 app.use(express.json());
+
+if (isProduction) {
+    app.set('trust proxy', 1);
+}
 
 await connectDB();
 
@@ -38,7 +43,10 @@ app.use(session({
     resave: false,
     saveUninitialized: false,
     cookie: {
-        maxAge: 24 * 60 * 60 * 1000   //1 day
+        maxAge: 24 * 60 * 60 * 1000, // 1 day
+        httpOnly: true,
+        secure: isProduction,
+        sameSite: isProduction ? 'none' : 'lax'
     }
 }))
 
