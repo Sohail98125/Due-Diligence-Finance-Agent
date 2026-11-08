@@ -2,6 +2,7 @@ import { Link, Navigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import BackgroundDecor1 from "../utils/BackgroundDecor1";
 import { motion } from "motion/react";
+import posthog, { isPosthogConfigured } from "../posthog.js";
 
 /*
   RESPONSIVE RULE:
@@ -73,7 +74,11 @@ const Login = () => {
                     variants={loginItemVariants}
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.97 }}
-                    href={GOOGLE_LINK} className="flex w-full items-center justify-center gap-2 rounded-full bg-black py-2.5 text-sm font-semibold text-white shadow-lg transition hover:translate-colors hover:bg-white hover:text-black focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black sm:gap-3 sm:py-3.5 sm:text-base">
+                    href={GOOGLE_LINK}
+                    onClick={() => {
+                        if (isPosthogConfigured) posthog.capture("login_started");
+                    }}
+                    className="flex w-full items-center justify-center gap-2 rounded-full bg-black py-2.5 text-sm font-semibold text-white shadow-lg transition hover:translate-colors hover:bg-white hover:text-black focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black sm:gap-3 sm:py-3.5 sm:text-base">
                     <span className="flex h-7 w-7 items-center justify-center rounded-full bg-white sm:h-8 sm:w-8">
                         <svg viewBox="0 0 48 48" className="h-4 w-4 sm:h-4.5 sm:w-4.5" aria-hidden="true">
                             <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z" />

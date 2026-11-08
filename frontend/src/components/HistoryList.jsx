@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "motion/react";
 import { getHistory } from "../services/api.js";
+import posthog, { isPosthogConfigured } from "../posthog.js";
 
 const HistoryList = ({ activeJobId, refreshKey = 0 }) => {
     const [historyList, setHistoryList] = useState([]);
@@ -76,7 +77,10 @@ const HistoryList = ({ activeJobId, refreshKey = 0 }) => {
                         }}
                         key={item.jobId || item._id || item.id}
                         type="button"
-                        onClick={() => navigate(`/dashboard/reports/${item.jobId}`)}
+                        onClick={() => {
+                            if (isPosthogConfigured) posthog.capture("report_opened");
+                            navigate(`/dashboard/reports/${item.jobId}`);
+                        }}
                         aria-current={isActive ? "page" : undefined}
                         className={`block w-full rounded-xl border p-3 text-left transition ${isActive
                             ? "border-black/30 bg-white/80 shadow-sm"

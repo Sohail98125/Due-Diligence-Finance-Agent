@@ -2,6 +2,7 @@ import { useState } from "react";
 import { postAnalyze } from "../services/api.js";
 import { useNavigate } from "react-router-dom";
 import { motion } from "motion/react";
+import posthog, { isPosthogConfigured, posthogLogger } from "../posthog.js";
 
 const CompanySearchForm = ({ value, onChange, disabled }) => {
     const [submitting, setSubmitting] = useState(false);
@@ -20,8 +21,22 @@ const CompanySearchForm = ({ value, onChange, disabled }) => {
         setSubmitting(true);
         try {
             const data = await postAnalyze(text);
+            if (isPosthogConfigured) {
+                posthog.capture("analysis_requested");
+                posthogLogger.info("analysis request accepted", {
+                    event: "analysis_request",
+                    outcome: "accepted",
+                });
+            }
             navigate(`/dashboard/reports/${data.jobId}`);
         } catch (err) {
+            if (isPosthogConfigured) {
+                posthog.capture("analysis_request_failed");
+                posthogLogger.error("analysis request failed", {
+                    event: "analysis_request",
+                    outcome: "failed",
+                });
+            }
             setError("Couldn't start the analysis, Try Again.");
         } finally {
             setSubmitting(false);
