@@ -7,18 +7,27 @@ import passport from './src/config/passport.js';
 import authRoutes from './src/routes/auth.routes.js';
 import analysisRoutes from './src/routes/analysis.routes.js';
 import "dotenv/config";
+import { startAnalysisWorker } from './src/queues/analysis.worker.js';
 
 const app = express();
 
 app.use(cors({
-    origin: "http://localhost:5173",
+    origin: process.env.CLIENT_URL || "http://localhost:5173",
     credentials: true
 }));
 
 app.use(express.json());
 
 await connectDB();
-const port = process.env.PORT;
+
+let worker = null;
+
+if (process.env.START_WORKER === 'true') {
+    worker = startAnalysisWorker();
+    console.log('Analysis worker started');
+}
+
+const port = process.env.PORT || 5000;
 
 app.get("/", (req, res) => {
     res.send("Server is running!");
@@ -45,6 +54,30 @@ app.use(passport.session());
 app.use('/auth', authRoutes);
 app.use('/api', analysisRoutes);
 
-app.listen(port, () => {
-    console.log(`Server is running on the port ${port}`)
-})
+const server = app.listen(port, () => {
+    console.log(`Server is running on the port ${port}`);
+});
+
+const shutdown = async () => {
+    console.log('Shutting down server...');
+
+    const closeServer = new Promise((resolve) => {
+        server.close(resolve);
+    });
+
+    try {
+        await Promise.all([
+            closeServer,
+            worker ? worker.close() : Promise.resolve()
+        ]);
+
+        console.log('Server and worker closed');
+        process.exit(0);
+    } catch (error) {
+        console.error('Shutdown error:', error);
+        process.exit(1);
+    }
+};
+
+process.on('SIGINT', shutdown);
+process.on('SIGTERM', shutdown);
