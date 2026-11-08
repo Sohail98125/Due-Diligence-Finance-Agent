@@ -2,7 +2,7 @@ import axios from 'axios';
 
 export const getStatus = async (jobId) => {
     try {
-        const response = await axios.get(`http://localhost:5000/api/status/${jobId}`,
+        const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/status/${jobId}`,
             {
                 withCredentials: true
             }
@@ -16,7 +16,7 @@ export const getStatus = async (jobId) => {
 
 export const getReport = async (jobId) => {
     try {
-        const response = await axios.get(`http://localhost:5000/api/report/${jobId}`,
+        const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/report/${jobId}`,
             {
                 withCredentials: true
             }
@@ -29,7 +29,7 @@ export const getReport = async (jobId) => {
 }
 
 export const postAnalyze = async (query) => {
-    const response = await axios.post('http://localhost:5000/api/analyze',
+    const response = await axios.post(`${import.meta.env.VITE_API_URL}/api/analyze`,
         {
             userRequest: query
         },
@@ -41,7 +41,7 @@ export const postAnalyze = async (query) => {
 }
 
 export const getHistory = async () => {
-    const response = await axios.get('http://localhost:5000/api/history',
+    const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/history`,
         {
             withCredentials: true
         }
@@ -52,7 +52,7 @@ export const getHistory = async () => {
 export const currentUser = async () => {
     try {
         const response = await axios.get(
-            "http://localhost:5000/auth/me",
+            `${import.meta.env.VITE_API_URL}/auth/me`,
             {
                 withCredentials: true
             }
@@ -73,7 +73,7 @@ export const currentUser = async () => {
 
 export const logOutUser = async () => {
     const response = await axios.post(
-        "http://localhost:5000/auth/logout",
+        `${import.meta.env.VITE_API_URL}/auth/logout`,
         {},
         {
             withCredentials: true
